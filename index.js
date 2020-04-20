@@ -8,7 +8,7 @@ const flatMap = require("lodash/flatMap")
 const map = require("lodash/map")
 const filter = require("lodash/filter")
 
-const RESULTS_FILE = "jest.results.json"
+const RESULTS_FILE = "./jest.results.json"
 const CWD = process.cwd() + path.sep
 
 // most @actions toolkit packages have async methods
@@ -33,8 +33,8 @@ async function run() {
       await exec.exec(cmd)
       console.log("Jest command executed")
     } catch (e) {
-      console.error("Error while executing jest", e)
-      console.error(e.stack)
+      console.error("Error while executing jest. Looks like some tests failed.")
+      console.error(e)
       // Some errors should be reported
     }
 
