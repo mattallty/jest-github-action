@@ -31,6 +31,7 @@ async function run() {
 
     try {
       await exec.exec(cmd)
+      console.log("Jest command executed")
     } catch (e) {
       console.error("Error while executing jest", e)
       console.error(e.stack)
@@ -40,6 +41,7 @@ async function run() {
     const results = require(RESULTS_FILE)
 
     if (results.success && !reportOnSuccess) {
+      console.log("Skipping reporting success")
       return
     }
 
