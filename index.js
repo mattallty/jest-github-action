@@ -23,7 +23,7 @@ async function run() {
       cmd.startsWith("yarn") ||
       cmd.startsWith("npx")
     ) {
-      cmd += `-- --testLocationInResults --json --outputFile=${RESULTS_FILE}`
+      cmd += ` -- --testLocationInResults --json --outputFile=${RESULTS_FILE}`
     }
 
     const octokit = new GitHub(token)
