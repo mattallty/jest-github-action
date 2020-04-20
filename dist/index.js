@@ -905,7 +905,17 @@ module.exports = baseGetTag;
 /***/ }),
 /* 52 */,
 /* 53 */,
-/* 54 */,
+/* 54 */
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+"use strict";
+
+const ansiRegex = __webpack_require__(963);
+
+module.exports = string => typeof string === 'string' ? string.replace(ansiRegex(), '') : string;
+
+
+/***/ }),
 /* 55 */,
 /* 56 */,
 /* 57 */,
@@ -1319,6 +1329,7 @@ const pkg = __webpack_require__(731)
 const flatMap = __webpack_require__(537)
 const map = __webpack_require__(410)
 const filter = __webpack_require__(831)
+const strip = __webpack_require__(54)
 
 const RESULTS_FILE = "./jest.results.json"
 const CWD = process.cwd() + path.sep
@@ -1385,8 +1396,8 @@ async function run() {
             end_column: a.location.column,
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
-            message: result.message,
-            raw_details: a.failureMessages.join("\n\n"),
+            message: strip(result.message),
+            raw_details: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
@@ -13432,7 +13443,7 @@ module.exports = baseMatchesProperty;
 /* 731 */
 /***/ (function(module) {
 
-module.exports = {"name":"jest-github-action","version":"1.0.0","description":"JavaScript Action Template","main":"index.js","scripts":{"lint":"eslint index.js","package":"ncc build index.js -o dist","test":"jest"},"repository":{"type":"git","url":"git+https://github.com/actions/javascript-action.git"},"keywords":["GitHub","Actions","JavaScript"],"author":"Matthias Etienne <matthias@etienne.in>","license":"MIT","bugs":{"url":"https://github.com/actions/javascript-action/issues"},"homepage":"https://github.com/actions/javascript-action#readme","dependencies":{"@actions/core":"^1.1.1","@actions/exec":"^1.0.3","@actions/github":"^2.1.1","lodash":"^4.17.15","markdown-table":"^2.0.0"},"devDependencies":{"@zeit/ncc":"^0.20.5","eslint":"^6.3.0","jest":"^24.9.0"}};
+module.exports = {"name":"jest-github-action","version":"1.0.0","description":"JavaScript Action Template","main":"index.js","scripts":{"lint":"eslint index.js","package":"ncc build index.js -o dist","test":"jest"},"repository":{"type":"git","url":"git+https://github.com/actions/javascript-action.git"},"keywords":["GitHub","Actions","JavaScript"],"author":"Matthias Etienne <matthias@etienne.in>","license":"MIT","bugs":{"url":"https://github.com/actions/javascript-action/issues"},"homepage":"https://github.com/actions/javascript-action#readme","dependencies":{"@actions/core":"^1.1.1","@actions/exec":"^1.0.3","@actions/github":"^2.1.1","lodash":"^4.17.15","markdown-table":"^2.0.0","strip-ansi":"^6.0.0"},"devDependencies":{"@zeit/ncc":"^0.20.5","eslint":"^6.3.0","jest":"^24.9.0"}};
 
 /***/ }),
 /* 732 */,
@@ -30940,7 +30951,23 @@ module.exports.shellSync = (cmd, opts) => handleShell(module.exports.sync, cmd, 
 module.exports = {"numFailedTestSuites":1,"numFailedTests":1,"numPassedTestSuites":1,"numPassedTests":2,"numPendingTestSuites":0,"numPendingTests":0,"numRuntimeErrorTestSuites":0,"numTodoTests":0,"numTotalTestSuites":2,"numTotalTests":3,"openHandles":[],"snapshot":{"added":0,"didUpdate":false,"failure":false,"filesAdded":0,"filesRemoved":0,"filesRemovedList":[],"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0},"startTime":1587394751897,"success":false,"testResults":[{"assertionResults":[{"ancestorTitles":["Other suite"],"failureMessages":["Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m1\u001b[39m\n    at Object.toBe (/Volumes/Home/matt/dev/jest-github-action/other.test.js:3:15)\n    at Object.asyncJestTest (/Volumes/Home/matt/dev/jest-github-action/node_modules/jest-jasmine2/build/jasmineAsyncInstall.js:102:37)\n    at /Volumes/Home/matt/dev/jest-github-action/node_modules/jest-jasmine2/build/queueRunner.js:43:12\n    at new Promise (<anonymous>)\n    at mapper (/Volumes/Home/matt/dev/jest-github-action/node_modules/jest-jasmine2/build/queueRunner.js:26:19)\n    at /Volumes/Home/matt/dev/jest-github-action/node_modules/jest-jasmine2/build/queueRunner.js:73:41\n    at processTicksAndRejections (internal/process/task_queues.js:97:5)"],"fullName":"Other suite should fail","location":{"column":2,"line":2},"status":"failed","title":"should fail"}],"endTime":1587394752262,"message":"\u001b[1m\u001b[31m  \u001b[1m● \u001b[1mOther suite › should fail\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n    Expected: \u001b[32m2\u001b[39m\n    Received: \u001b[31m1\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 1 | \u001b[39mdescribe(\u001b[32m\"Other suite\"\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 2 | \u001b[39m  it(\u001b[32m\"should fail\"\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m\u001b[31m\u001b[1m>\u001b[2m\u001b[39m\u001b[90m 3 | \u001b[39m    expect(\u001b[35m1\u001b[39m)\u001b[33m.\u001b[39mtoBe(\u001b[35m2\u001b[39m)\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m   | \u001b[39m              \u001b[31m\u001b[1m^\u001b[2m\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 4 | \u001b[39m  })\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 5 | \u001b[39m})\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 6 | \u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.toBe (\u001b[2m\u001b[0m\u001b[36mother.test.js\u001b[39m\u001b[0m\u001b[2m:3:15)\u001b[2m\u001b[22m\n","name":"/Volumes/Home/matt/dev/jest-github-action/other.test.js","startTime":1587394751921,"status":"failed","summary":""},{"assertionResults":[{"ancestorTitles":[],"failureMessages":[],"fullName":"throws invalid number","location":{"column":1,"line":4},"status":"passed","title":"throws invalid number"},{"ancestorTitles":[],"failureMessages":[],"fullName":"wait 500 ms","location":{"column":1,"line":8},"status":"passed","title":"wait 500 ms"}],"endTime":1587394752660,"message":"","name":"/Volumes/Home/matt/dev/jest-github-action/index.test.js","startTime":1587394752267,"status":"passed","summary":""}],"wasInterrupted":false};
 
 /***/ }),
-/* 963 */,
+/* 963 */
+/***/ (function(module) {
+
+"use strict";
+
+
+module.exports = ({onlyFirst = false} = {}) => {
+	const pattern = [
+		'[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+		'(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
+	].join('|');
+
+	return new RegExp(pattern, onlyFirst ? undefined : 'g');
+};
+
+
+/***/ }),
 /* 964 */,
 /* 965 */,
 /* 966 */

@@ -7,6 +7,7 @@ const pkg = require("./package")
 const flatMap = require("lodash/flatMap")
 const map = require("lodash/map")
 const filter = require("lodash/filter")
+const strip = require("strip-ansi")
 
 const RESULTS_FILE = "./jest.results.json"
 const CWD = process.cwd() + path.sep
@@ -73,8 +74,8 @@ async function run() {
             end_column: a.location.column,
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
-            message: result.message,
-            raw_details: a.failureMessages.join("\n\n"),
+            message: strip(result.message),
+            raw_details: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
