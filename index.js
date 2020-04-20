@@ -14,7 +14,7 @@ const CWD = process.cwd() + path.sep
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const token = core.getInput("github-token")
+    const token = core.getInput("github-token", { required: true })
     let cmd = core.getInput("test-command", { required: false })
     const reportOnSuccess = !!core.getInput("on-success", { required: false })
 
