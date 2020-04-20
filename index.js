@@ -34,11 +34,13 @@ async function run() {
       console.log("Jest command executed")
     } catch (e) {
       console.error("Error while executing jest. Looks like some tests failed.")
-      console.error(e)
+      // console.error(e)
       // Some errors should be reported
     }
 
     const results = require(RESULTS_FILE)
+    console.log("Jest results:")
+    console.dir(results, { depth: 10 })
 
     if (results.success && !reportOnSuccess) {
       console.log("Skipping reporting success")
