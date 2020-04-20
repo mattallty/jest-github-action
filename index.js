@@ -55,7 +55,7 @@ async function run() {
         return
       }
       const entries = filter(map(results.testResults, (r) => strip(r.message)))
-      return "- " + entries.join("\n- ")
+      return "```\n" + entries.join("\n") + "```"
     }
 
     const getAnnotations = () => {
