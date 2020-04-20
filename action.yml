@@ -1,13 +1,16 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: "jest-github-action"
+description: "Jest action adding checks to your pull requests"
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  github-token:
+    description: "Your Github token"
     required: true
-    default: '1000'
+  test-command:
+    description: "The test command to run"
+    required: false
+    default: "npm test"
 outputs:
-  time: # output will be available to future steps 
-    description: 'The message to output'
+  time: # output will be available to future steps
+    description: "The message to output"
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"

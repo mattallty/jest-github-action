@@ -1,12 +1,12 @@
 {
-  "name": "javascript-action",
+  "name": "jest-github-action",
   "version": "1.0.0",
   "description": "JavaScript Action Template",
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js",
     "package": "ncc build index.js -o dist",
-    "test": "eslint index.js && jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,14 +17,18 @@
     "Actions",
     "JavaScript"
   ],
-  "author": "GitHub",
+  "author": "Matthias Etienne <matthias@etienne.in>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/actions/javascript-action/issues"
   },
   "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.1"
+    "@actions/core": "^1.1.1",
+    "@actions/exec": "^1.0.3",
+    "@actions/github": "^2.1.1",
+    "lodash": "^4.17.15",
+    "markdown-table": "^2.0.0"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.20.5",
