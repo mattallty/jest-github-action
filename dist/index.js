@@ -1331,8 +1331,8 @@ const map = __webpack_require__(410)
 const filter = __webpack_require__(831)
 const strip = __webpack_require__(54)
 
-const RESULTS_FILE = "./jest.results.json"
 const CWD = process.cwd() + path.sep
+const RESULTS_FILE = path.join(CWD, "jest.results.json")
 
 // most @actions toolkit packages have async methods
 async function run() {
@@ -1362,7 +1362,7 @@ async function run() {
       // Some errors should be reported
     }
 
-    const results = __webpack_require__(876)
+    const results = __webpack_require__(591)
     console.log("Jest results:")
     console.dir(results, { depth: 10 })
 
@@ -11527,7 +11527,13 @@ module.exports = equalObjects;
 /* 588 */,
 /* 589 */,
 /* 590 */,
-/* 591 */,
+/* 591 */
+/***/ (function() {
+
+eval("require")("/Volumes/Home/matt/dev/jest-github-action/jest.results.json");
+
+
+/***/ }),
 /* 592 */,
 /* 593 */,
 /* 594 */,
@@ -28919,13 +28925,7 @@ module.exports = stackGet;
 /* 873 */,
 /* 874 */,
 /* 875 */,
-/* 876 */
-/***/ (function() {
-
-eval("require")("./jest.results.json");
-
-
-/***/ }),
+/* 876 */,
 /* 877 */,
 /* 878 */
 /***/ (function(module, __unusedexports, __webpack_require__) {

@@ -9,8 +9,8 @@ const map = require("lodash/map")
 const filter = require("lodash/filter")
 const strip = require("strip-ansi")
 
-const RESULTS_FILE = "./jest.results.json"
 const CWD = process.cwd() + path.sep
+const RESULTS_FILE = path.join(CWD, "jest.results.json")
 
 // most @actions toolkit packages have async methods
 async function run() {
