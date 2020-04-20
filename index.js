@@ -9,11 +9,11 @@ const map = require("lodash/map")
 const filter = require("lodash/filter")
 const strip = require("strip-ansi")
 
-const CWD = process.cwd() + path.sep
-const RESULTS_FILE = path.join(CWD, "jest.results.json")
-
 // most @actions toolkit packages have async methods
 async function run() {
+  const CWD = process.cwd() + path.sep
+  const RESULTS_FILE = path.join(CWD, "jest.results.json")
+
   try {
     // const token = core.getInput("github-token", { required: true })
     const token = process.env.GITHUB_TOKEN

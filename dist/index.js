@@ -1331,11 +1331,11 @@ const map = __webpack_require__(410)
 const filter = __webpack_require__(831)
 const strip = __webpack_require__(54)
 
-const CWD = process.cwd() + path.sep
-const RESULTS_FILE = path.join(CWD, "jest.results.json")
-
 // most @actions toolkit packages have async methods
 async function run() {
+  const CWD = process.cwd() + path.sep
+  const RESULTS_FILE = path.join(CWD, "jest.results.json")
+
   try {
     // const token = core.getInput("github-token", { required: true })
     const token = process.env.GITHUB_TOKEN
