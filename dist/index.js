@@ -1377,7 +1377,7 @@ async function run() {
         }
         return result.assertionResults.map((a) => {
           return {
-            path: a.name.replace(CWD, ""),
+            path: result.name.replace(CWD, ""),
             start_line: a.location.line,
             end_line: a.location.line,
             start_column: a.location.column,
