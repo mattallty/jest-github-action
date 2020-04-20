@@ -8,9 +8,7 @@ inputs:
     description: "The test command to run"
     required: false
     default: "npm test"
-outputs:
-  time: # output will be available to future steps
-    description: "The message to output"
+
 runs:
   using: "node12"
   main: "dist/index.js"
