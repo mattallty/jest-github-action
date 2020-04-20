@@ -26,6 +26,8 @@ async function run() {
       cmd += ` -- --testLocationInResults --json --outputFile=${RESULTS_FILE}`
     }
 
+    console.log("Token length: " + token.length)
+
     const octokit = new GitHub(token)
 
     try {
