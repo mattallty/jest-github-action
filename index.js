@@ -53,7 +53,7 @@ async function run() {
       if (results.success) {
         return
       }
-      const entries = filter(map(results.testResults, "message"))
+      const entries = filter(map(results.testResults, (r) => strip(r.message)))
       return "- " + entries.join("\n- ")
     }
 
@@ -75,7 +75,7 @@ async function run() {
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
             message: strip(result.message),
-            raw_details: strip(a.failureMessages.join("\n\n")),
+            // raw_details: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
