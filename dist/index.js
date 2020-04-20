@@ -1339,6 +1339,7 @@ async function run() {
       cmd += ` -- --testLocationInResults --json --outputFile=${RESULTS_FILE}`
     }
 
+    console.log("Final test command: " + cmd)
     const octokit = new GitHub(token)
 
     try {
