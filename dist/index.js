@@ -1391,7 +1391,7 @@ async function run() {
         })
       })
 
-      return "- " + entries.join("\n- ")
+      return filter(entries)
     }
 
     const payload = {
