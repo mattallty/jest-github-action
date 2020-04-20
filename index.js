@@ -32,7 +32,7 @@ async function run() {
     try {
       await exec.exec(cmd)
     } catch (e) {
-      console.error(e)
+      console.error("Error while executing jest", e)
       console.error(e.stack)
       // Some errors should be reported
     }
@@ -77,7 +77,9 @@ async function run() {
       return "- " + entries.join("\n- ")
     }
 
-    octokit.checks.create({
+    console.log("Creating check")
+
+    const check = await octokit.checks.create({
       ...context.repo,
       head_sha: context.sha,
       name: pkg.name,
@@ -93,7 +95,9 @@ async function run() {
         annotations: getAnnotations(),
       },
     })
+    console.log("Check created", check)
   } catch (error) {
+    console.error(error.message)
     core.setFailed(error.message)
   }
 }
