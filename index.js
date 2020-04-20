@@ -3,6 +3,7 @@ const { GitHub, context } = require("@actions/github")
 const exec = require("@actions/exec")
 const process = require("process")
 const path = require("path")
+const fs = require("fs")
 const pkg = require("./package")
 const flatMap = require("lodash/flatMap")
 const map = require("lodash/map")
@@ -40,7 +41,7 @@ async function run() {
       // Some errors should be reported
     }
 
-    const results = require(RESULTS_FILE)
+    const results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf-8"))
     console.log("Jest results:")
     console.dir(results, { depth: 10 })
 

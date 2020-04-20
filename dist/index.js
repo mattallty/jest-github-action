@@ -1325,6 +1325,7 @@ const { GitHub, context } = __webpack_require__(469)
 const exec = __webpack_require__(986)
 const process = __webpack_require__(765)
 const path = __webpack_require__(622)
+const fs = __webpack_require__(747)
 const pkg = __webpack_require__(731)
 const flatMap = __webpack_require__(537)
 const map = __webpack_require__(410)
@@ -1362,7 +1363,7 @@ async function run() {
       // Some errors should be reported
     }
 
-    const results = __webpack_require__(591)
+    const results = JSON.parse(fs.readFileSync(RESULTS_FILE, "utf-8"))
     console.log("Jest results:")
     console.dir(results, { depth: 10 })
 
@@ -11527,13 +11528,7 @@ module.exports = equalObjects;
 /* 588 */,
 /* 589 */,
 /* 590 */,
-/* 591 */
-/***/ (function() {
-
-eval("require")("/Volumes/Home/matt/dev/jest-github-action/jest.results.json");
-
-
-/***/ }),
+/* 591 */,
 /* 592 */,
 /* 593 */,
 /* 594 */,
