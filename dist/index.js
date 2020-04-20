@@ -1410,7 +1410,9 @@ async function run() {
   }
 }
 
-run()
+if (require.main === require.cache[eval('__filename')]) {
+  run()
+}
 
 
 /***/ }),
