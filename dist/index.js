@@ -1389,9 +1389,7 @@ async function run() {
       return "- " + entries.join("\n- ")
     }
 
-    console.log("Creating check")
-
-    const check = await octokit.checks.create({
+    const payload = {
       ...context.repo,
       head_sha: context.sha,
       name: pkg.name,
@@ -1406,7 +1404,10 @@ async function run() {
 
         annotations: getAnnotations(),
       },
-    })
+    }
+
+    console.log("Creating check", payload)
+    const check = await octokit.checks.create(payload)
     console.log("Check created", check)
   } catch (error) {
     console.error(error.message)
