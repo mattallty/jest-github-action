@@ -13,6 +13,7 @@ import { createCoverageMap, CoverageMapData } from "istanbul-lib-coverage"
 import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
+const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 
 export async function run() {
   const CWD = process.cwd() + sep
@@ -47,6 +48,7 @@ export async function run() {
     if (shouldCommentCoverage()) {
       const comment = getCoverageTable(results, CWD)
       if (comment) {
+        await deletePreviousComments(octokit)
         const commentPayload = getCommentPayload(comment)
         const com = await octokit.issues.createComment(commentPayload)
         console.debug("Comment created: %j", com)
@@ -62,7 +64,21 @@ export async function run() {
   }
 }
 
-function deletePreviousComments() {}
+async function deletePreviousComments(octokit: GitHub) {
+  const { data } = await octokit.issues.listComments({
+    ...context.repo,
+    per_page: 100,
+    issue_number: getPullId(),
+  })
+  return Promise.all(
+    data
+      .filter(
+        (c) =>
+          c.user.login === "github-actions[bot]" && c.body.startsWith(COVERAGE_HEADER),
+      )
+      .map((c) => octokit.issues.deleteComment({ ...context.repo, comment_id: c.id })),
+  )
+}
 
 function shouldCommentCoverage(): boolean {
   return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
@@ -94,9 +110,7 @@ export function getCoverageTable(
     ])
   }
 
-  return (
-    ":loop: **Code coverage**\n\n" + table(rows, { align: ["l", "r", "r", "r", "r"] })
-  )
+  return COVERAGE_HEADER + table(rows, { align: ["l", "r", "r", "r", "r"] })
 }
 
 function getCommentPayload(body: string) {
