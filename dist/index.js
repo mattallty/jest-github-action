@@ -1337,6 +1337,8 @@ async function run() {
   const CWD = process.cwd() + path.sep
   const RESULTS_FILE = path.join(CWD, "jest.results.json")
 
+  console.dir(process.env)
+
   try {
     const token = process.env.GITHUB_TOKEN
     let cmd = core.getInput("test-command", { required: false })
@@ -1392,8 +1394,6 @@ async function run() {
             path: result.name.replace(CWD, ""),
             start_line: a.location.line,
             end_line: a.location.line,
-            // start_column: a.location.column,
-            // end_column: a.location.column,
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
             message: strip(result.message),
@@ -1406,7 +1406,8 @@ async function run() {
     const payload = {
       ...context.repo,
       head_sha: context.sha,
-      name: pkg.name,
+      name: "action-test",
+      // name: pkg.name,
       status: "completed",
       conclusion: results.success ? "success" : "failure",
       output: {
@@ -1421,9 +1422,9 @@ async function run() {
     }
 
     console.log("Creating check", payload)
-    const check = await octokit.checks.create(payload)
-    console.log("Check created", check)
-    // core.setFailed("Some tests failed.")
+    await octokit.checks.create(payload)
+    console.log("Check created")
+    core.setFailed("Some jest tests failed.")
   } catch (error) {
     console.error(error.message)
     core.setFailed(error.message)
