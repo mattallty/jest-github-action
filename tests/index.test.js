@@ -1,9 +1,13 @@
 const action = require("../index")
 
-test("throws invalid number", async () => {
-  await expect(1).toBeTruthy()
+test("throws invalid number", () => {
+  expect(1).toBeTruthy()
 })
 
 test("wait 500 ms", async () => {
   expect(500).toBeGreaterThan(450)
+})
+
+test("action should be a function", () => {
+  expect(action).toBe(expect.any(Function))
 })
