@@ -91,7 +91,7 @@ async function run() {
     const payload = {
       ...context.repo,
       head_sha,
-      name: process.env.GITHUB_JOB || context.action,
+      name: pkg.name,
       status: "completed",
       conclusion: results.success ? "success" : "failure",
       output: {
