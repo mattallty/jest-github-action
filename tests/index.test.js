@@ -1,5 +1,4 @@
-const path = require("path")
-const prog = require("./index")
+const action = require("../index")
 
 test("throws invalid number", async () => {
   await expect(1).toBeTruthy()

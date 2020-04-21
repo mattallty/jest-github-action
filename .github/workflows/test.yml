@@ -1,4 +1,4 @@
-name: "units-test"
+name: "Tests"
 on:
   pull_request:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   # unit tests
-  units:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -16,13 +16,14 @@ jobs:
       - run: npm test
 
   # test action works running from the graph
-  test:
+  action-test:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v1
-      - run: npm ci
+      # - run: npm ci
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-command: "npm run failing-test"
