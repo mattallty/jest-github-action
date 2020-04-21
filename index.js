@@ -81,9 +81,16 @@ async function run() {
       return filter(entries)
     }
 
+    let head_sha
+    try {
+      head_sha = context.payload.pull_request.head.sha
+    } catch (e) {
+      head_sha = context.sha
+    }
+
     const payload = {
       ...context.repo,
-      head_sha: context.sha,
+      head_sha,
       name: context.action,
       status: "completed",
       conclusion: results.success ? "success" : "failure",
