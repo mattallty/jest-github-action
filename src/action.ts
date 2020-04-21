@@ -45,9 +45,11 @@ async function run() {
     // Coverage comments
     if (shouldCommentCoverage()) {
       const comment = getCoverageTable(results, CWD)
-      const commentPayload = getCommentPayload(comment)
-      const com = await octokit.issues.createComment(commentPayload)
-      console.debug("Comment created: %j", com)
+      if (comment) {
+        const commentPayload = getCommentPayload(comment)
+        const com = await octokit.issues.createComment(commentPayload)
+        console.debug("Comment created: %j", com)
+      }
     }
 
     if (!results.success) {
@@ -63,12 +65,20 @@ function shouldCommentCoverage(): boolean {
   return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
 }
 
-function getCoverageTable(results: FormattedTestResults, cwd: string): string {
+function getCoverageTable(results: FormattedTestResults, cwd: string): string | false {
   if (!results.coverageMap) {
     return ""
   }
   const covMap = createCoverageMap(results.coverageMap)
   const rows = [["Filename", "Statements", "Branches", "Functions", "Lines"]]
+
+  console.log("COVERAGE MAP")
+  console.dir(results.coverageMap, { depth: 10 })
+
+  if (!Object.keys(covMap.data).length) {
+    console.error("No entries found in coverage data")
+    return false
+  }
 
   for (const [filename, data] of Object.entries(covMap.data || {})) {
     const { data: summary } = data.toSummary()
@@ -84,10 +94,10 @@ function getCoverageTable(results: FormattedTestResults, cwd: string): string {
 }
 
 function getCommentPayload(body: string) {
-  const payload: Octokit.IssuesCreateCommentParamsDeprecatedNumber = {
+  const payload: Octokit.IssuesCreateCommentParams = {
     ...context.repo,
     body,
-    number: getPullId(),
+    issue_number: getPullId(),
   }
   return payload
 }
