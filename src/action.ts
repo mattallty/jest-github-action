@@ -127,9 +127,9 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
 
 function getJestCommand(resultsFile: string) {
   let cmd = core.getInput("test-command", { required: false })
-  const jestOptions =
-    `--testLocationInResults --json --outputFile ${resultsFile}` +
-    (shouldCommentCoverage() ? " --coverage" : "")
+  const jestOptions = `--testLocationInResults --json ${
+    shouldCommentCoverage() ? "--coverage" : ""
+  } --outputFile=${resultsFile}`
   const isNpm = cmd.startsWith("npm") || cmd.startsWith("npx")
   cmd += (isNpm ? " -- " : " ") + jestOptions
   core.debug("Final test command: " + cmd)
