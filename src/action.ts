@@ -9,7 +9,7 @@ import filter from "lodash/filter"
 import map from "lodash/map"
 import strip from "strip-ansi"
 import table from "markdown-table"
-import { CoverageMap } from "istanbul-lib-coverage"
+import { createCoverageMap } from "istanbul-lib-coverage"
 import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
@@ -67,7 +67,7 @@ function getCoverageTable(results: FormattedTestResults, cwd: string): string {
   if (!results.coverageMap) {
     return ""
   }
-  const covMap = new CoverageMap(results.coverageMap)
+  const covMap = createCoverageMap(results.coverageMap)
   const rows = [["Filename", "Statements", "Branches", "Functions", "Lines"]]
 
   for (const [filename, data] of Object.entries(covMap.data || {})) {
