@@ -1413,7 +1413,7 @@ async function run() {
     const payload = {
       ...context.repo,
       head_sha,
-      name: context.action,
+      name: process.env.GITHUB_JOB || context.action,
       status: "completed",
       conclusion: results.success ? "success" : "failure",
       output: {
