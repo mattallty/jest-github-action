@@ -20,7 +20,6 @@ jobs:
   action-test:
     name: "Failing tests (on purpose)"
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v1
       - run: npm ci
