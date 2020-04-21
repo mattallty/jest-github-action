@@ -133,7 +133,9 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
       title: results.success ? "Jest tests passed" : "Jest tests failed",
       text: getOutputText(results),
       summary: results.success
-        ? `${results.numPassedTests} tests in ${results.numPassedTestSuites} passed`
+        ? `${results.numPassedTests} tests passing in ${
+            results.numPassedTestSuites
+          } suite${results.numPassedTestSuites > 1 ? "s" : ""}.`
         : `Failed tests: ${results.numFailedTests}/${results.numTotalTests}. Failed suites: ${results.numFailedTests}/${results.numTotalTestSuites}.`,
 
       annotations: getAnnotations(results, cwd),
