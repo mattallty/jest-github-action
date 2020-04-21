@@ -2,12 +2,12 @@
   "name": "jest-github-action",
   "version": "1.0.0",
   "description": "Jest action adding checks to your pull requests",
-  "main": "lib/action.js",
+  "main": "lib/run.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "build": "tsc",
-    "pack": "ncc build lib/index.js -m",
+    "pack": "ncc build lib/run.js -m",
     "prepack": "npm run build",
     "failing-test": "jest failing-tests",
     "test": "jest /tests/"
