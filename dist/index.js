@@ -1396,7 +1396,7 @@ async function run() {
             end_line: a.location.line,
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
-            message: strip(result.message),
+            message: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
