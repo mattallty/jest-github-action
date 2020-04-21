@@ -1,4 +1,4 @@
-name: "Tests"
+name: "CI"
 on:
   pull_request:
   push:
@@ -8,20 +8,22 @@ on:
 
 jobs:
   # unit tests
-  tests:
+  test:
+    name: "Unit tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - run: npm ci
       - run: npm test
 
-  # test action works running from the graph
+  # Failing tests on purpose
   action-test:
+    name: "Failing tests (on purpose)"
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
       - uses: actions/checkout@v1
-      # - run: npm ci
+      - run: npm ci
       - uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
