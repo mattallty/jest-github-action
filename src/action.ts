@@ -9,14 +9,13 @@ import filter from "lodash/filter"
 import map from "lodash/map"
 import strip from "strip-ansi"
 import table from "markdown-table"
-import { AggregatedResult } from "@jest/test-result"
 import { createCoverageMap, CoverageMapData } from "istanbul-lib-coverage"
 import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
 
 // most @actions toolkit packages have async methods
-async function run() {
+export async function run() {
   const CWD = process.cwd() + sep
   const RESULTS_FILE = join(CWD, "jest.results.json")
 
@@ -66,17 +65,15 @@ function shouldCommentCoverage(): boolean {
   return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
 }
 
-function getCoverageTable(results: FormattedTestResults, cwd: string): string | false {
+export function getCoverageTable(
+  results: FormattedTestResults,
+  cwd: string,
+): string | false {
   if (!results.coverageMap) {
     return ""
   }
   const covMap = createCoverageMap((results.coverageMap as unknown) as CoverageMapData)
   const rows = [["Filename", "Statements", "Branches", "Functions", "Lines"]]
-
-  console.log("COVERAGE MAP")
-  console.dir(results.coverageMap, { depth: 10 })
-  console.log("COVERAGE MAP REF")
-  console.dir(covMap, { depth: 10 })
 
   if (!Object.keys(covMap.data).length) {
     console.error("No entries found in coverage data")
@@ -93,7 +90,10 @@ function getCoverageTable(results: FormattedTestResults, cwd: string): string | 
       summary.lines.pct + "%",
     ])
   }
-  return asMarkdownCode(table(rows, { align: ["l", "r", "r", "r", "r"] }))
+
+  return (
+    ":loop: **Code coverage**\n\n" + table(rows, { align: ["l", "r", "r", "r", "r"] })
+  )
 }
 
 function getCommentPayload(body: string) {
@@ -193,10 +193,4 @@ const getOutputText = (results: FormattedTestResults) => {
 
 function asMarkdownCode(str: string) {
   return "```\n" + str.trimRight() + "\n```"
-}
-
-module.exports = run
-
-if (require.main === module) {
-  run()
 }
