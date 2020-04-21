@@ -105,7 +105,8 @@ async function run() {
       },
     }
 
-    console.log("Creating check", payload)
+    console.log("Creating check")
+    console.dir(payload, { depth: 10 })
     await octokit.checks.create(payload)
     console.log("Check created")
     core.setFailed("Some jest tests failed.")
