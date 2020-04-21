@@ -9,7 +9,8 @@ import filter from "lodash/filter"
 import map from "lodash/map"
 import strip from "strip-ansi"
 import table from "markdown-table"
-import { createCoverageMap } from "istanbul-lib-coverage"
+import { AggregatedResult } from "@jest/test-result"
+import { createCoverageMap, CoverageMapData } from "istanbul-lib-coverage"
 import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
@@ -69,11 +70,13 @@ function getCoverageTable(results: FormattedTestResults, cwd: string): string | 
   if (!results.coverageMap) {
     return ""
   }
-  const covMap = createCoverageMap(results.coverageMap)
+  const covMap = createCoverageMap((results.coverageMap as unknown) as CoverageMapData)
   const rows = [["Filename", "Statements", "Branches", "Functions", "Lines"]]
 
   console.log("COVERAGE MAP")
   console.dir(results.coverageMap, { depth: 10 })
+  console.log("COVERAGE MAP REF")
+  console.dir(covMap, { depth: 10 })
 
   if (!Object.keys(covMap.data).length) {
     console.error("No entries found in coverage data")
