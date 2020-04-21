@@ -115,12 +115,12 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
 
 function getJestCommand(resultsFile: string) {
   let cmd = core.getInput("test-command", { required: false })
-  const jestOptions = `--testLocationInResults --json --outputFile ${resultsFile}`
+  const jestOptions =
+    `--testLocationInResults --json --outputFile ${resultsFile}` +
+    (shouldCommentCoverage() ? " --coverage" : "")
   const isNpm = cmd.startsWith("npm") || cmd.startsWith("npx")
   cmd += (isNpm ? " -- " : " ") + jestOptions
-
   core.debug("Final test command: " + cmd)
-
   return cmd
 }
 
@@ -132,7 +132,7 @@ function parseResults(resultsFile: string): FormattedTestResults {
 
 async function execJest(cmd: string) {
   try {
-    await exec(cmd, [], { silent: true })
+    await exec(cmd, [], { silent: false })
     console.debug("Jest command executed")
   } catch (e) {
     console.debug("Jest execution failed. Tests have likely failed.")
