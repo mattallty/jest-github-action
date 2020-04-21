@@ -9,5 +9,5 @@ test("wait 500 ms", async () => {
 })
 
 test("action should be a function", () => {
-  expect(action).toBe(expect.any(Function))
+  expect(action).toStrictEqual(expect.any(Function))
 })

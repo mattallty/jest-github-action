@@ -101,6 +101,7 @@ async function run() {
     console.log("Creating check", payload)
     const check = await octokit.checks.create(payload)
     console.log("Check created", check)
+    core.setFailed("Some tests failed.")
   } catch (error) {
     console.error(error.message)
     core.setFailed(error.message)
