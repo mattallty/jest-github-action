@@ -17,9 +17,7 @@ class JestGithubActionReporter {
       return
     }
 
-    for (const [filename, data] of Object.entries(
-      testResult.coverageMap.data || {}
-    )) {
+    for (const [filename, data] of Object.entries(testResult.coverageMap.data || {})) {
       const { data: summary } = data.toSummary()
       rows.push([
         filename.replace(rootDir, ""),

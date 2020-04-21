@@ -8,6 +8,10 @@ inputs:
     description: "The test command to run"
     required: false
     default: "npm test"
+  coverage-comment:
+    description: "Comment PRs with code coverage"
+    required: false
+    default: "true"
 
 runs:
   using: "node12"

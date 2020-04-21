@@ -1,4 +1,4 @@
-const action = require("../index")
+const action = require("../action")
 
 test("throws invalid number", () => {
   expect(1).toBeTruthy()
