@@ -84,8 +84,7 @@ async function run() {
     const payload = {
       ...context.repo,
       head_sha: context.sha,
-      name: "action-test",
-      // name: pkg.name,
+      name: context.action,
       status: "completed",
       conclusion: results.success ? "success" : "failure",
       output: {
