@@ -1,7 +1,8 @@
 name: "Jest Annotations & Coverage"
 description: "Jest action adding checks and annotations to your pull requests and comment them with code coverage results."
-icon: check
-color: blue
+branding:
+  icon: "check"
+  color: "blue"
 inputs:
   test-command:
     description: "The test command to run"
