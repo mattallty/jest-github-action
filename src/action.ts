@@ -31,8 +31,6 @@ export async function run() {
       return
     }
 
-    console.dir(context, { depth: 5 })
-
     const cmd = getJestCommand(RESULTS_FILE)
 
     await execJest(cmd)
@@ -45,8 +43,7 @@ export async function run() {
 
     // Checks
     const checkPayload = getCheckPayload(results, CWD)
-    const check = await octokit.checks.create(checkPayload)
-    console.debug("Check created: %j", check)
+    await octokit.checks.create(checkPayload)
 
     // Coverage comments
     if (shouldCommentCoverage()) {
@@ -54,8 +51,7 @@ export async function run() {
       if (comment) {
         await deletePreviousComments(octokit)
         const commentPayload = getCommentPayload(comment)
-        const com = await octokit.issues.createComment(commentPayload)
-        console.debug("Comment created: %j", com)
+        await octokit.issues.createComment(commentPayload)
       }
     }
 
@@ -186,11 +182,7 @@ function getPullId(): number {
 }
 
 function getSha(): string {
-  try {
-    return PR?.head.sha
-  } catch (e) {
-    return context.sha
-  }
+  return PR?.head.sha ?? context.sha
 }
 
 const getAnnotations = (

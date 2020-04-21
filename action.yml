@@ -12,7 +12,7 @@ inputs:
   changes-only:
     description: "Only run tests on changed files (over base branch)"
     required: false
-    default: "true"
+    default: "false"
 
 runs:
   using: "node12"
