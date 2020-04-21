@@ -14,6 +14,10 @@ import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
 const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
+const {
+  repo: REPO,
+  payload: { pull_request: PR },
+} = context
 
 export async function run() {
   const CWD = process.cwd() + sep
@@ -66,7 +70,7 @@ export async function run() {
 
 async function deletePreviousComments(octokit: GitHub) {
   const { data } = await octokit.issues.listComments({
-    ...context.repo,
+    ...REPO,
     per_page: 100,
     issue_number: getPullId(),
   })
@@ -76,12 +80,16 @@ async function deletePreviousComments(octokit: GitHub) {
         (c) =>
           c.user.login === "github-actions[bot]" && c.body.startsWith(COVERAGE_HEADER),
       )
-      .map((c) => octokit.issues.deleteComment({ ...context.repo, comment_id: c.id })),
+      .map((c) => octokit.issues.deleteComment({ ...REPO, comment_id: c.id })),
   )
 }
 
 function shouldCommentCoverage(): boolean {
   return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
+}
+
+function shouldRunOnlyChangedFiles(): boolean {
+  return Boolean(JSON.parse(core.getInput("changes-only", { required: false })))
 }
 
 export function getCoverageTable(
@@ -115,7 +123,7 @@ export function getCoverageTable(
 
 function getCommentPayload(body: string) {
   const payload: Octokit.IssuesCreateCommentParams = {
-    ...context.repo,
+    ...REPO,
     body,
     issue_number: getPullId(),
   }
@@ -124,7 +132,7 @@ function getCommentPayload(body: string) {
 
 function getCheckPayload(results: FormattedTestResults, cwd: string) {
   const payload: Octokit.ChecksCreateParams = {
-    ...context.repo,
+    ...REPO,
     head_sha: getSha(),
     name: ACTION_NAME,
     status: "completed",
@@ -149,6 +157,8 @@ function getJestCommand(resultsFile: string) {
   let cmd = core.getInput("test-command", { required: false })
   const jestOptions = `--testLocationInResults --json ${
     shouldCommentCoverage() ? "--coverage" : ""
+  } ${
+    shouldRunOnlyChangedFiles() && PR?.base.ref ? "--changedSince=" + PR?.base.ref : ""
   } --outputFile=${resultsFile}`
   const isNpm = cmd.startsWith("npm") || cmd.startsWith("npx")
   cmd += (isNpm ? " -- " : " ") + jestOptions
@@ -172,12 +182,12 @@ async function execJest(cmd: string) {
 }
 
 function getPullId(): number {
-  return context.payload.pull_request?.number ?? 0
+  return PR?.number ?? 0
 }
 
 function getSha(): string {
   try {
-    return context.payload.pull_request?.head.sha
+    return PR?.head.sha
   } catch (e) {
     return context.sha
   }
