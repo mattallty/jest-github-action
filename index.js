@@ -63,22 +63,18 @@ async function run() {
       if (results.success) {
         return []
       }
-      const entries = flatMap(results.testResults, (result) => {
-        if (result.status !== "failed") {
-          return
-        }
-        return result.assertionResults.map((a) => {
-          return {
+      return flatMap(results.testResults, (result) => {
+        return filter(result.assertionResults, ["status", "failed"]).map(
+          (assertion) => ({
             path: result.name.replace(CWD, ""),
-            start_line: a.location.line,
-            end_line: a.location.line,
+            start_line: assertion.location.line,
+            end_line: assertion.location.line,
             annotation_level: "failure",
-            title: a.ancestorTitles.concat(a.title).join(" > "),
-            message: strip(a.failureMessages.join("\n\n")),
-          }
-        })
+            title: assertion.ancestorTitles.concat(assertion.title).join(" > "),
+            message: strip(assertion.failureMessages.join("\n\n")),
+          })
+        )
       })
-      return filter(entries)
     }
 
     let head_sha
