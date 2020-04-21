@@ -144,7 +144,7 @@ function parseResults(resultsFile: string): FormattedTestResults {
 
 async function execJest(cmd: string) {
   try {
-    await exec(cmd, [], { silent: false })
+    await exec(cmd, [], { silent: true })
     console.debug("Jest command executed")
   } catch (e) {
     console.debug("Jest execution failed. Tests have likely failed.")

@@ -15,4 +15,4 @@ inputs:
 
 runs:
   using: "node12"
-  main: "dist/index.js"
+  main: "lib/run.js"
