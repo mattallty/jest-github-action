@@ -1,7 +1,7 @@
 import { sep, join } from "path"
 import { readFileSync } from "fs"
 import { exec } from "@actions/exec"
-import core from "@actions/core"
+import * as core from "@actions/core"
 import { GitHub, context } from "@actions/github"
 import type { Octokit } from "@octokit/rest"
 import flatMap from "lodash/flatMap"
