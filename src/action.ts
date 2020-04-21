@@ -27,7 +27,7 @@ export async function run() {
       return
     }
 
-    console.dir(context)
+    console.dir(context, { depth: 5 })
 
     const cmd = getJestCommand(RESULTS_FILE)
 
