@@ -9,4 +9,7 @@ describe("My test suite", () => {
   test("this one should work", () => {
     expect(1).toBeTruthy()
   })
+  test("this one should also work", () => {
+    expect(true).toBeTruthy()
+  })
 })
