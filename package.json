@@ -7,7 +7,7 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "build": "tsc",
-    "pack": "ncc build -m",
+    "pack": "ncc build lib/index.js -m",
     "prepack": "npm run build",
     "failing-test": "jest failing-tests",
     "test": "jest /tests/"

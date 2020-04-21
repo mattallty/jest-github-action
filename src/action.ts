@@ -14,7 +14,6 @@ import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
 
-// most @actions toolkit packages have async methods
 export async function run() {
   const CWD = process.cwd() + sep
   const RESULTS_FILE = join(CWD, "jest.results.json")
