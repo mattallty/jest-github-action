@@ -26,6 +26,8 @@ export async function run() {
       return
     }
 
+    console.dir(context)
+
     const cmd = getJestCommand(RESULTS_FILE)
 
     await execJest(cmd)
@@ -59,6 +61,8 @@ export async function run() {
     core.setFailed(error.message)
   }
 }
+
+function deletePreviousComments() {}
 
 function shouldCommentCoverage(): boolean {
   return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
