@@ -1,13 +1,18 @@
 name: "jest-github-action"
 description: "Jest action adding checks to your pull requests"
 inputs:
-  github-token:
-    description: "Your Github token"
-    required: true
   test-command:
     description: "The test command to run"
     required: false
     default: "npm test"
+  coverage-comment:
+    description: "Comment PRs with code coverage"
+    required: false
+    default: "true"
+  changes-only:
+    description: "Only run tests on changed files (over base branch)"
+    required: false
+    default: "false"
 
 runs:
   using: "node12"
