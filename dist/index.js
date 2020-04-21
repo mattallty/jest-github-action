@@ -1318,7 +1318,7 @@ module.exports = equalArrays;
 /* 102 */,
 /* 103 */,
 /* 104 */
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(470)
 const { GitHub, context } = __webpack_require__(469)
@@ -1338,7 +1338,6 @@ async function run() {
   const RESULTS_FILE = path.join(CWD, "jest.results.json")
 
   try {
-    // const token = core.getInput("github-token", { required: true })
     const token = process.env.GITHUB_TOKEN
     let cmd = core.getInput("test-command", { required: false })
     const reportOnSuccess = !!core.getInput("on-success", { required: false })
@@ -1398,7 +1397,6 @@ async function run() {
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
             message: strip(result.message),
-            // raw_details: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
@@ -1425,11 +1423,14 @@ async function run() {
     console.log("Creating check", payload)
     const check = await octokit.checks.create(payload)
     console.log("Check created", check)
+    core.setFailed("Some tests failed.")
   } catch (error) {
     console.error(error.message)
     core.setFailed(error.message)
   }
 }
+
+module.exports = run
 
 if (require.main === require.cache[eval('__filename')]) {
   run()
@@ -13443,7 +13444,7 @@ module.exports = baseMatchesProperty;
 /* 731 */
 /***/ (function(module) {
 
-module.exports = {"name":"jest-github-action","version":"1.0.0","description":"JavaScript Action Template","main":"index.js","scripts":{"lint":"eslint index.js","package":"ncc build index.js -o dist","test":"jest"},"repository":{"type":"git","url":"git+https://github.com/actions/javascript-action.git"},"keywords":["GitHub","Actions","JavaScript"],"author":"Matthias Etienne <matthias@etienne.in>","license":"MIT","bugs":{"url":"https://github.com/actions/javascript-action/issues"},"homepage":"https://github.com/actions/javascript-action#readme","dependencies":{"@actions/core":"^1.1.1","@actions/exec":"^1.0.3","@actions/github":"^2.1.1","lodash":"^4.17.15","markdown-table":"^2.0.0","strip-ansi":"^6.0.0"},"devDependencies":{"@zeit/ncc":"^0.20.5","eslint":"^6.3.0","jest":"^24.9.0"}};
+module.exports = {"name":"jest-github-action","version":"1.0.0","description":"JavaScript Action Template","main":"index.js","scripts":{"lint":"eslint index.js","package":"ncc build index.js -o dist","failing-test":"jest failing-tests","test":"jest /tests/"},"repository":{"type":"git","url":"git+https://github.com/actions/javascript-action.git"},"keywords":["GitHub","Actions","JavaScript"],"author":"Matthias Etienne <matthias@etienne.in>","license":"MIT","bugs":{"url":"https://github.com/actions/javascript-action/issues"},"homepage":"https://github.com/actions/javascript-action#readme","dependencies":{"@actions/core":"^1.1.1","@actions/exec":"^1.0.3","@actions/github":"^2.1.1","lodash":"^4.17.15","markdown-table":"^2.0.0","strip-ansi":"^6.0.0"},"devDependencies":{"@zeit/ncc":"^0.20.5","eslint":"^6.3.0","jest":"^24.9.0"}};
 
 /***/ }),
 /* 732 */,

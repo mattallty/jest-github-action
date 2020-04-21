@@ -16,7 +16,6 @@ async function run() {
   const RESULTS_FILE = path.join(CWD, "jest.results.json")
 
   try {
-    // const token = core.getInput("github-token", { required: true })
     const token = process.env.GITHUB_TOKEN
     let cmd = core.getInput("test-command", { required: false })
     const reportOnSuccess = !!core.getInput("on-success", { required: false })
@@ -76,7 +75,6 @@ async function run() {
             annotation_level: "failure",
             title: a.ancestorTitles.concat(a.title).join(" > "),
             message: strip(result.message),
-            // raw_details: strip(a.failureMessages.join("\n\n")),
           }
         })
       })
@@ -103,11 +101,14 @@ async function run() {
     console.log("Creating check", payload)
     const check = await octokit.checks.create(payload)
     console.log("Check created", check)
+    core.setFailed("Some tests failed.")
   } catch (error) {
     console.error(error.message)
     core.setFailed(error.message)
   }
 }
+
+module.exports = run
 
 if (require.main === module) {
   run()

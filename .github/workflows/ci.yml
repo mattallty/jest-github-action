@@ -1,4 +1,4 @@
-name: "units-test"
+name: "CI"
 on:
   pull_request:
   push:
@@ -8,15 +8,17 @@ on:
 
 jobs:
   # unit tests
-  units:
+  test:
+    name: "Unit tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - run: npm ci
       - run: npm test
 
-  # test action works running from the graph
-  test:
+  # Failing tests on purpose
+  action-test:
+    name: "Failing tests (on purpose)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -25,4 +27,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-command: "npm run failing-test"
