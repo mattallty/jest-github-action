@@ -5,6 +5,14 @@ Main features:
 - Add status checks with code annotations to your pull requests
 - Comment your pull requests with code coverage table (if tests succeeded)
 
+## Coverage example
+
+![Coverage](assets/coverage.png)
+
+## Check annotations example
+
+![Fail](assets/fail.png)
+
 ## Usage
 
 You can now consume the action by referencing the v1 branch
