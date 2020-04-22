@@ -14,10 +14,6 @@ import type { FormattedTestResults } from "@jest/test-result/build/types"
 
 const ACTION_NAME = "jest-github-action"
 const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
-const {
-  repo: REPO,
-  payload: { pull_request: PR },
-} = context
 
 export async function run() {
   const CWD = process.cwd() + sep
@@ -66,7 +62,7 @@ export async function run() {
 
 async function deletePreviousComments(octokit: GitHub) {
   const { data } = await octokit.issues.listComments({
-    ...REPO,
+    ...context.repo,
     per_page: 100,
     issue_number: getPullId(),
   })
@@ -76,7 +72,7 @@ async function deletePreviousComments(octokit: GitHub) {
         (c) =>
           c.user.login === "github-actions[bot]" && c.body.startsWith(COVERAGE_HEADER),
       )
-      .map((c) => octokit.issues.deleteComment({ ...REPO, comment_id: c.id })),
+      .map((c) => octokit.issues.deleteComment({ ...context.repo, comment_id: c.id })),
   )
 }
 
@@ -119,7 +115,7 @@ export function getCoverageTable(
 
 function getCommentPayload(body: string) {
   const payload: Octokit.IssuesCreateCommentParams = {
-    ...REPO,
+    ...context.repo,
     body,
     issue_number: getPullId(),
   }
@@ -128,7 +124,7 @@ function getCommentPayload(body: string) {
 
 function getCheckPayload(results: FormattedTestResults, cwd: string) {
   const payload: Octokit.ChecksCreateParams = {
-    ...REPO,
+    ...context.repo,
     head_sha: getSha(),
     name: ACTION_NAME,
     status: "completed",
@@ -154,7 +150,9 @@ function getJestCommand(resultsFile: string) {
   const jestOptions = `--testLocationInResults --json ${
     shouldCommentCoverage() ? "--coverage" : ""
   } ${
-    shouldRunOnlyChangedFiles() && PR?.base.ref ? "--changedSince=" + PR?.base.ref : ""
+    shouldRunOnlyChangedFiles() && context.payload.pull_request?.base.ref
+      ? "--changedSince=" + context.payload.pull_request?.base.ref
+      : ""
   } --outputFile=${resultsFile}`
   const isNpm = cmd.startsWith("npm") || cmd.startsWith("npx")
   cmd += (isNpm ? " -- " : " ") + jestOptions
@@ -178,11 +176,11 @@ async function execJest(cmd: string) {
 }
 
 function getPullId(): number {
-  return PR?.number ?? 0
+  return context.payload.pull_request?.number ?? 0
 }
 
 function getSha(): string {
-  return PR?.head.sha ?? context.sha
+  return context.payload.pull_request?.head.sha ?? context.sha
 }
 
 const getAnnotations = (
@@ -212,6 +210,6 @@ const getOutputText = (results: FormattedTestResults) => {
   return asMarkdownCode(entries.join("\n"))
 }
 
-function asMarkdownCode(str: string) {
+export function asMarkdownCode(str: string) {
   return "```\n" + str.trimRight() + "\n```"
 }
