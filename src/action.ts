@@ -1,4 +1,4 @@
-import { sep, join } from "path"
+import { sep, join, resolve } from "path"
 import { readFileSync } from "fs"
 import { exec } from "@actions/exec"
 import * as core from "@actions/core"
@@ -16,7 +16,9 @@ const ACTION_NAME = "jest-github-action"
 const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 
 export async function run() {
-  const CWD = process.cwd() + sep
+  let workingDirectory = core.getInput("working-directory", { required: false })
+  let cwd = workingDirectory ? resolve(workingDirectory) : process.cwd()
+  const CWD = cwd + sep
   const RESULTS_FILE = join(CWD, "jest.results.json")
 
   try {
@@ -29,7 +31,7 @@ export async function run() {
 
     const cmd = getJestCommand(RESULTS_FILE)
 
-    await execJest(cmd)
+    await execJest(cmd, CWD)
 
     // octokit
     const octokit = new GitHub(token)
@@ -166,9 +168,9 @@ function parseResults(resultsFile: string): FormattedTestResults {
   return results
 }
 
-async function execJest(cmd: string) {
+async function execJest(cmd: string, cwd?: string) {
   try {
-    await exec(cmd, [], { silent: true })
+    await exec(cmd, [], { silent: true, cwd })
     console.debug("Jest command executed")
   } catch (e) {
     console.debug("Jest execution failed. Tests have likely failed.")

@@ -60,4 +60,17 @@ with:
   coverage-comment: false
 ```
 
+### Running tests in a subdirectory
+
+For running tests in folders other than root, supply a working-directory.
+
+```yaml
+uses: mattallty/jest-github-action@v1
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+with:
+  working-directory: "frontend"
+```
+
+
 See the [actions tab](https://github.com/mattallty/jest-github-action/actions) for runs of this action! :rocket:
