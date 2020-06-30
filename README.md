@@ -49,4 +49,15 @@ with:
   changes-only: true
 ```
 
+### Silencing the code coverage comment
+
+```yaml
+uses: mattallty/jest-github-action@v1
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+with:
+  # To avoid reporting code coverage, set this variable to false
+  coverage-comment: false
+```
+
 See the [actions tab](https://github.com/mattallty/jest-github-action/actions) for runs of this action! :rocket:
