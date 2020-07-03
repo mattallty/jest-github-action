@@ -8,6 +8,10 @@ inputs:
     description: "The test command to run"
     required: false
     default: "npm test"
+  working-directory:
+    description: "Subdirectory to run tests in"
+    required: false
+    default: ""
   coverage-comment:
     description: "Comment PRs with code coverage"
     required: false
