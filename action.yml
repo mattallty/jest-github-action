@@ -4,6 +4,14 @@ branding:
   icon: "check"
   color: "blue"
 inputs:
+  process-only:
+    description: "Only process the result file"
+    required: false
+    default: "false"
+  results-file:
+    description: "Filename for the jest result file"
+    required: false
+    default: "jest.results.json"
   test-command:
     description: "The test command to run"
     required: false
