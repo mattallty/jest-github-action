@@ -192,9 +192,12 @@ const getAnnotations = (
   if (results.success) {
     return []
   }
+  const workingDirectory = core.getInput("working-directory", { required: false })
   return flatMap(results.testResults, (result) => {
     return filter(result.assertionResults, ["status", "failed"]).map((assertion) => ({
-      path: result.name.replace(cwd, ""),
+      path: workingDirectory
+        ? result.name.replace(cwd, workingDirectory)
+        : result.name.replace(cwd, ""),
       start_line: assertion.location?.line ?? 0,
       end_line: assertion.location?.line ?? 0,
       annotation_level: "failure",
