@@ -20,6 +20,9 @@ inputs:
     description: "Only run tests on changed files (over base branch)"
     required: false
     default: "false"
+  check-name:
+    description: "Status check name"
+    required: true
 
 runs:
   using: "node12"
