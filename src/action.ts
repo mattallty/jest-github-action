@@ -156,8 +156,8 @@ function getJestCommand(resultsFile: string) {
       ? "--changedSince=" + context.payload.pull_request?.base.ref
       : ""
   } --outputFile=${resultsFile}`
-  const isNpm = cmd.startsWith("npm") || cmd.startsWith("npx")
-  cmd += (isNpm ? " -- " : " ") + jestOptions
+  const shouldAddHyphen = cmd.startsWith("npm") || cmd.startsWith("npx") || cmd.startsWith("pnpm") || cmd.startsWith("pnpx")
+  cmd += (shouldAddHyphen ? " -- " : " ") + jestOptions
   core.debug("Final test command: " + cmd)
   return cmd
 }
