@@ -18,10 +18,7 @@ const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 export async function run() {
   let workingDirectory = core.getInput("working-directory", { required: false })
   let cwd = workingDirectory ? resolve(workingDirectory) : process.cwd()
-  let resultFileName = core.getInput("results-file", { required: false })
-  if (resultFileName === "") {
-    resultFileName = "jest.results.json";
-  }
+  const resultFileName = core.getInput("results-file", { required: false }) || "jest.results.json"
   let processOnly = core.getInput("process-only", { required: false })
 
   const CWD = cwd + sep
