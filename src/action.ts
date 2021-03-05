@@ -18,9 +18,12 @@ const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 export async function run() {
   let workingDirectory = core.getInput("working-directory", { required: false })
   let cwd = workingDirectory ? resolve(workingDirectory) : process.cwd()
-  const CWD = cwd + sep
-  const RESULTS_FILE = join(CWD, "jest.results.json")
+  const resultFileName = core.getInput("results-file", { required: false }) || "jest.results.json"
+  let processOnly = core.getInput("process-only", { required: false })
 
+  const CWD = cwd + sep
+  const RESULTS_FILE = join(CWD, resultFileName)
+  
   try {
     const token = process.env.GITHUB_TOKEN
     if (token === undefined) {
@@ -29,9 +32,14 @@ export async function run() {
       return
     }
 
-    const cmd = getJestCommand(RESULTS_FILE)
+    if (processOnly === "true") {
+      console.log("Processing file: " + RESULTS_FILE)
+    } else {
+      const cmd = getJestCommand(RESULTS_FILE)
 
-    await execJest(cmd, CWD)
+      await execJest(cmd, CWD)
+
+    }
 
     // octokit
     const octokit = new GitHub(token)

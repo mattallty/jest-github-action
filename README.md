@@ -72,5 +72,15 @@ with:
   working-directory: "frontend"
 ```
 
+### Process jest result and publish
+
+```yaml
+uses: mattallty/jest-github-action@v1
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+with:
+  process-only: true
+  results-file: "jest.results.json"
+```
 
 See the [actions tab](https://github.com/mattallty/jest-github-action/actions) for runs of this action! :rocket:
