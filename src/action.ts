@@ -128,7 +128,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
   const payload: Octokit.ChecksCreateParams = {
     ...context.repo,
     head_sha: getSha(),
-    name: ACTION_NAME,
+    name: core.getInput("check-name", { required: false }) || ACTION_NAME,
     status: "completed",
     conclusion: results.success ? "success" : "failure",
     output: {
