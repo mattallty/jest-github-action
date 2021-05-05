@@ -16,7 +16,7 @@ const ACTION_NAME = "jest-github-action"
 const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 
 export async function run() {
-  let workingDirectory = core.getInput("working-directory", { required: false })
+  let workingDirectory = core.getInput("working-directory")
   let cwd = workingDirectory ? resolve(workingDirectory) : process.cwd()
   const CWD = cwd + sep
   const RESULTS_FILE = join(CWD, "jest.results.json")
@@ -35,9 +35,11 @@ export async function run() {
     const checkPayload = getCheckPayload(results, CWD)
 
     /* All the github stuff */
-    let talkToGithub = core.getInput("talk-to-github", { required: false }) != "false"
+    let talkToGithub = core.getInput("talk-to-github") != "false"
+    console.debug("talk-to-github", core.getInput("talk-to-github"))
 
     if (talkToGithub) {
+      console.debug("Talking to github")
       const token = process.env.GITHUB_TOKEN
       if (token === undefined) {
         core.error("GITHUB_TOKEN not set.")
@@ -83,11 +85,11 @@ async function deletePreviousComments(octokit: GitHub) {
 }
 
 function shouldCommentCoverage(): boolean {
-  return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
+  return Boolean(JSON.parse(core.getInput("coverage-comment")))
 }
 
 function shouldRunOnlyChangedFiles(): boolean {
-  return Boolean(JSON.parse(core.getInput("changes-only", { required: false })))
+  return Boolean(JSON.parse(core.getInput("changes-only")))
 }
 
 export function getCoverageTable(
@@ -132,7 +134,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
   const payload: Octokit.ChecksCreateParams = {
     ...context.repo,
     head_sha: getSha(),
-    name: core.getInput("check-name", { required: false }) || ACTION_NAME,
+    name: core.getInput("check-name") || ACTION_NAME,
     status: "completed",
     conclusion: results.success ? "success" : "failure",
     output: {
@@ -152,7 +154,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
 }
 
 function getJestCommand(resultsFile: string) {
-  let cmd = core.getInput("test-command", { required: false })
+  let cmd = core.getInput("test-command")
   const jestOptions = `--testLocationInResults --json ${
     shouldCommentCoverage() ? "--coverage" : ""
   } ${
