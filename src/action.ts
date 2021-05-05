@@ -22,39 +22,43 @@ export async function run() {
   const RESULTS_FILE = join(CWD, "jest.results.json")
 
   try {
-    const token = process.env.GITHUB_TOKEN
-    if (token === undefined) {
-      core.error("GITHUB_TOKEN not set.")
-      core.setFailed("GITHUB_TOKEN not set.")
-      return
-    }
-
     const cmd = getJestCommand(RESULTS_FILE)
 
     await execJest(cmd, CWD)
 
-    // octokit
-    const octokit = new GitHub(token)
-
     // Parse results
     const results = parseResults(RESULTS_FILE)
-
-    // Checks
-    const checkPayload = getCheckPayload(results, CWD)
-    await octokit.checks.create(checkPayload)
-
-    // Coverage comments
-    if (getPullId() && shouldCommentCoverage()) {
-      const comment = getCoverageTable(results, CWD)
-      if (comment) {
-        await deletePreviousComments(octokit)
-        const commentPayload = getCommentPayload(comment)
-        await octokit.issues.createComment(commentPayload)
-      }
-    }
-
     if (!results.success) {
       core.setFailed("Some jest tests failed.")
+    }
+    // Checks
+    const checkPayload = getCheckPayload(results, CWD)
+
+    /* All the github stuff */
+    let talkToGithub = core.getInput("talk-to-github", { required: false }) != "false"
+
+    if (talkToGithub) {
+      const token = process.env.GITHUB_TOKEN
+      if (token === undefined) {
+        core.error("GITHUB_TOKEN not set.")
+        core.setFailed("GITHUB_TOKEN not set.")
+        return
+      }
+
+      // octokit
+      const octokit = new GitHub(token)
+
+      await octokit.checks.create(checkPayload)
+
+      // Coverage comments
+      if (getPullId() && shouldCommentCoverage()) {
+        const comment = getCoverageTable(results, CWD)
+        if (comment) {
+          await deletePreviousComments(octokit)
+          const commentPayload = getCommentPayload(comment)
+          await octokit.issues.createComment(commentPayload)
+        }
+      }
     }
   } catch (error) {
     console.error(error)
@@ -156,7 +160,11 @@ function getJestCommand(resultsFile: string) {
       ? "--changedSince=" + context.payload.pull_request?.base.ref
       : ""
   } --outputFile=${resultsFile}`
-  const shouldAddHyphen = cmd.startsWith("npm") || cmd.startsWith("npx") || cmd.startsWith("pnpm") || cmd.startsWith("pnpx")
+  const shouldAddHyphen =
+    cmd.startsWith("npm") ||
+    cmd.startsWith("npx") ||
+    cmd.startsWith("pnpm") ||
+    cmd.startsWith("pnpx")
   cmd += (shouldAddHyphen ? " -- " : " ") + jestOptions
   core.debug("Final test command: " + cmd)
   return cmd
