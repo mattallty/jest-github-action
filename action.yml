@@ -4,6 +4,10 @@ branding:
   icon: "check"
   color: "blue"
 inputs:
+  talk-to-github:
+    description: "Wether the action should talk to the github ui"
+    required: false
+    default: "true"
   test-command:
     description: "The test command to run"
     required: false
@@ -25,5 +29,5 @@ inputs:
     required: true
 
 runs:
-  using: "node12"
+  using: "node15"
   main: "dist/index.js"
