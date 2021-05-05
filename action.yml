@@ -29,5 +29,5 @@ inputs:
     required: true
 
 runs:
-  using: "node15"
+  using: "docker"
   main: "dist/index.js"
