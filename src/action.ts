@@ -16,45 +16,51 @@ const ACTION_NAME = "jest-github-action"
 const COVERAGE_HEADER = ":loop: **Code coverage**\n\n"
 
 export async function run() {
-  let workingDirectory = core.getInput("working-directory", { required: false })
+  let workingDirectory = core.getInput("working-directory")
   let cwd = workingDirectory ? resolve(workingDirectory) : process.cwd()
   const CWD = cwd + sep
   const RESULTS_FILE = join(CWD, "jest.results.json")
 
   try {
-    const token = process.env.GITHUB_TOKEN
-    if (token === undefined) {
-      core.error("GITHUB_TOKEN not set.")
-      core.setFailed("GITHUB_TOKEN not set.")
-      return
-    }
-
     const cmd = getJestCommand(RESULTS_FILE)
 
     await execJest(cmd, CWD)
 
-    // octokit
-    const octokit = new GitHub(token)
-
     // Parse results
     const results = parseResults(RESULTS_FILE)
-
-    // Checks
-    const checkPayload = getCheckPayload(results, CWD)
-    await octokit.checks.create(checkPayload)
-
-    // Coverage comments
-    if (getPullId() && shouldCommentCoverage()) {
-      const comment = getCoverageTable(results, CWD)
-      if (comment) {
-        await deletePreviousComments(octokit)
-        const commentPayload = getCommentPayload(comment)
-        await octokit.issues.createComment(commentPayload)
-      }
-    }
-
     if (!results.success) {
       core.setFailed("Some jest tests failed.")
+    }
+    // Checks
+    const checkPayload = getCheckPayload(results, CWD)
+
+    /* All the github stuff */
+    let talkToGithub = core.getInput("talk-to-github") != "false"
+    console.log("talk-to-github", core.getInput("talk-to-github"))
+
+    if (talkToGithub) {
+      console.log("Talking to github")
+      const token = process.env.GITHUB_TOKEN
+      if (token === undefined) {
+        core.error("GITHUB_TOKEN not set.")
+        core.setFailed("GITHUB_TOKEN not set.")
+        return
+      }
+
+      // octokit
+      const octokit = new GitHub(token)
+
+      await octokit.checks.create(checkPayload)
+
+      // Coverage comments
+      if (getPullId() && shouldCommentCoverage()) {
+        const comment = getCoverageTable(results, CWD)
+        if (comment) {
+          await deletePreviousComments(octokit)
+          const commentPayload = getCommentPayload(comment)
+          await octokit.issues.createComment(commentPayload)
+        }
+      }
     }
   } catch (error) {
     console.error(error)
@@ -79,11 +85,11 @@ async function deletePreviousComments(octokit: GitHub) {
 }
 
 function shouldCommentCoverage(): boolean {
-  return Boolean(JSON.parse(core.getInput("coverage-comment", { required: false })))
+  return Boolean(JSON.parse(core.getInput("coverage-comment")))
 }
 
 function shouldRunOnlyChangedFiles(): boolean {
-  return Boolean(JSON.parse(core.getInput("changes-only", { required: false })))
+  return Boolean(JSON.parse(core.getInput("changes-only")))
 }
 
 export function getCoverageTable(
@@ -128,7 +134,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
   const payload: Octokit.ChecksCreateParams = {
     ...context.repo,
     head_sha: getSha(),
-    name: core.getInput("check-name", { required: false }) || ACTION_NAME,
+    name: core.getInput("check-name") || ACTION_NAME,
     status: "completed",
     conclusion: results.success ? "success" : "failure",
     output: {
@@ -148,7 +154,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
 }
 
 function getJestCommand(resultsFile: string) {
-  let cmd = core.getInput("test-command", { required: false })
+  let cmd = core.getInput("test-command")
   const jestOptions = `--testLocationInResults --json ${
     shouldCommentCoverage() ? "--coverage" : ""
   } ${
@@ -156,7 +162,11 @@ function getJestCommand(resultsFile: string) {
       ? "--changedSince=" + context.payload.pull_request?.base.ref
       : ""
   } --outputFile=${resultsFile}`
-  const shouldAddHyphen = cmd.startsWith("npm") || cmd.startsWith("npx") || cmd.startsWith("pnpm") || cmd.startsWith("pnpx")
+  const shouldAddHyphen =
+    cmd.startsWith("npm") ||
+    cmd.startsWith("npx") ||
+    cmd.startsWith("pnpm") ||
+    cmd.startsWith("pnpx")
   cmd += (shouldAddHyphen ? " -- " : " ") + jestOptions
   core.debug("Final test command: " + cmd)
   return cmd

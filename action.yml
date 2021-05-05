@@ -4,6 +4,10 @@ branding:
   icon: "check"
   color: "blue"
 inputs:
+  talk-to-github:
+    description: "Wether the action should talk to the github ui"
+    required: false
+    default: "true"
   test-command:
     description: "The test command to run"
     required: false
