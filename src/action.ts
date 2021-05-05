@@ -36,10 +36,10 @@ export async function run() {
 
     /* All the github stuff */
     let talkToGithub = core.getInput("talk-to-github") != "false"
-    console.debug("talk-to-github", core.getInput("talk-to-github"))
+    console.log("talk-to-github", core.getInput("talk-to-github"))
 
     if (talkToGithub) {
-      console.debug("Talking to github")
+      console.log("Talking to github")
       const token = process.env.GITHUB_TOKEN
       if (token === undefined) {
         core.error("GITHUB_TOKEN not set.")
