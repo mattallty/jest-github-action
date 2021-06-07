@@ -138,7 +138,7 @@ function getCheckPayload(results: FormattedTestResults, cwd: string) {
         ? `${results.numPassedTests} tests passing in ${
             results.numPassedTestSuites
           } suite${results.numPassedTestSuites > 1 ? "s" : ""}.`
-        : `Failed tests: ${results.numFailedTests}/${results.numTotalTests}. Failed suites: ${results.numFailedTests}/${results.numTotalTestSuites}.`,
+        : `Failed tests: ${results.numFailedTests}/${results.numTotalTests}. Failed suites: ${results.numFailedTestSuites}/${results.numTotalTestSuites}.`,
 
       annotations: getAnnotations(results, cwd),
     },
