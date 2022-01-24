@@ -72,5 +72,17 @@ with:
   working-directory: "frontend"
 ```
 
+### Editing the status check name
+
+For running tests with a different status check name, supply a check-name.
+_(note: you need to reference the latest master branch for this option)_
+
+```yaml
+uses: mattallty/jest-github-action@master
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+with:
+  check-name: "jest-check"
+```
 
 See the [actions tab](https://github.com/mattallty/jest-github-action/actions) for runs of this action! :rocket:
