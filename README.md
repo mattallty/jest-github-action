@@ -75,6 +75,7 @@ with:
 ### Editing the status check name
 
 For running tests with a different status check name, supply a check-name.
+
 _(note: you need to reference the latest master branch for this option)_
 
 ```yaml
