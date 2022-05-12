@@ -72,5 +72,15 @@ with:
   working-directory: "frontend"
 ```
 
+### Hide details in coverage comment
+
+```yaml
+uses: mattallty/jest-github-action@v1
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+with:
+  # To hide details in coverage comment
+  hide-details: true
+```
 
 See the [actions tab](https://github.com/mattallty/jest-github-action/actions) for runs of this action! :rocket:

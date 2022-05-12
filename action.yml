@@ -23,6 +23,10 @@ inputs:
   check-name:
     description: "Status check name"
     required: true
+  hide-details:
+    description: "Hide details in coverage comment"
+    required: false
+    default: "false"
 
 runs:
   using: "node12"
