@@ -86,6 +86,10 @@ function shouldRunOnlyChangedFiles(): boolean {
   return Boolean(JSON.parse(core.getInput("changes-only", { required: false })))
 }
 
+function shouldHideDetails(): boolean {
+  return Boolean(JSON.parse(core.getInput("hide-details", { required: false })))
+}
+
 export function getCoverageTable(
   results: FormattedTestResults,
   cwd: string,
@@ -112,7 +116,12 @@ export function getCoverageTable(
     ])
   }
 
-  return COVERAGE_HEADER + table(rows, { align: ["l", "r", "r", "r", "r"] })
+  let comment = COVERAGE_HEADER + table(rows, { align: ["l", "r", "r", "r", "r"] })
+  if (shouldHideDetails()) {
+    comment = COVERAGE_HEADER + "<details>\n\n" + table(rows, { align: ["l", "r", "r", "r", "r"] }) + "\n\n</details>"
+  }
+
+  return comment
 }
 
 function getCommentPayload(body: string) {
